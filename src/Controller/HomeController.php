@@ -25,7 +25,6 @@ class HomeController extends AbstractController
      */
     public function show(Post $post): Response
     {
-        dd($post);
-        return $this->render('home/index.html.twig', compact('posts', 'categories'));
+        return $this->render('home/show.html.twig', compact('post'));
     }
 }

@@ -14,11 +14,11 @@
 
 							<div class="col-sm">
 								<div class="card my-4" style="width: 18rem;">
-									<img src="{{ ( post.imageName != null) ? vich_uploader_asset(post) | imagine_filter('small_thumb') : asset('/images/posts/default/pexels-eberhard-grossgasteiger-844297.jpg') | imagine_filter('small_thumb') }}" alt="{{ post.title }}"/>
+									<img src="{{ ( post.imageName != null) ? vich_uploader_asset(post) | imagine_filter('small_thumb') : asset('/images/default/pexels-eberhard-grossgasteiger-844297.jpg') | imagine_filter('small_thumb') }}" alt="{{ post.title }}"/>
 									<div class="card-body">
 										<h5 class="card-title">{{ post.title}}</h5>
 										<p class="card-text">{{ post.description|raw }}</p>
-										<a href="{{ path('app_show',{id : post.id }) }}" class="btn btn-primary">Lire les articles</a>
+										<a href="{{ path('app_show',{id : post.id }) }}" class="btn btn-primary">Lire l'article</a>
 									</div>
 								</div>
 							</div>
@@ -30,12 +30,13 @@
 			<div class="col-2">
 				<h2>Categories</h2>
 				<div class="list-group">
-					<a href="{{ '' }}" class="list-group-item list-group-item-action active">Active item</a>
-					<a href="{{ '' }}" class="list-group-item list-group-item-action">Item</a>
-					<a href="{{ '' }}" class="list-group-item list-group-item-action">Disabled item</a>
+					{% for category in categories %}
+						<a href="{{ '' }}" class="list-group-item list-group-item-action">{{ category.name }}</a>
+					{% endfor %}
+
 				</div>
 			</div>
 
 		</div>
 	</div>
-</div>{% endblock %}
+{% endblock %}
