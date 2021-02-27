@@ -1,0 +1,56 @@
+{% extends 'admin/adminBase.html.twig' %}
+
+{% block title %}User index
+{% endblock %}
+
+{% block body %}
+	<nav class="navbar navbar-light d-flex justify-content-end ">
+		<form class="d-flex justify-content-end">
+			<input class="form-control me-2" type="search" placeholder="Search User" aria-label="Search">
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		</form>
+	</nav>
+	<main class="d-flex justify-content-between my-5">
+		{% for userss in users|batch(3) %}
+			{% for user in userss %}
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title text-center text-primary ">{{ user.fullName}}</h5>
+						<p class="card-text">
+							<span class="fw-bold">
+								Eamil :
+							</span>
+							{{ user.email }}</p>
+						<p class="card-text">
+							<span class="fw-bold">
+								Roles :
+							</span>
+							{{ user.roles ? user.roles|json_encode : '' }}</p>
+						<p class="card-text">
+							<span class="fw-bold">
+								Verified account :
+							</span>
+							{{ user.isVerified ? 'Yes' : 'No' }}</p>
+						<p class="card-text">
+							<span class="fw-bold">
+								Created at :
+							</span>
+							{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+						<p class="card-text">
+							<span class="fw-bold">
+								Updated at :
+							</span>
+							{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</p>
+						<div class="action d-flex justify-content-between">
+							<a class="card-link btn btn-primary" href="{{ path('app_admin_user_edit', {'id': user.id}) }}">Edit</a>
+							{{ include('admin/user/_delete_form.html.twig') }}
+						</div>
+
+					</div>
+				</div>
+			{% endfor %}
+
+		{% endfor %}
+	</main>
+
+{% endblock %}

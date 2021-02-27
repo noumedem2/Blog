@@ -1,0 +1,43 @@
+{% extends 'admin/adminBase.html.twig' %}
+
+{% block title %}Post index
+{% endblock %}
+
+{% block body %}
+	<nav class="navbar navbar-light ">
+		<form class="d-flex justify-content-end">
+			<input class="form-control me-2" type="search" placeholder="Search Post" aria-label="Search">
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		</form>
+		<a class="btn btn-primary" role="button" href="{{ path('app_admin_post_new') }}">Create new post</a>
+	</nav>
+
+	<table class="table my-3  table-hover text-center table-borderless">
+		<thead class="bg-info text-light">
+			<tr>
+				<th>Title</th>
+				<th>CreatedAt</th>
+				<th>UpdatedAt</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for post in posts %}
+				<tr>
+					<td>{{ post.title }}</td>
+					<td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td class="d-flex justify-content-evenly">
+						<a class="btn btn-primary" href="{{ path('app_admin_post_show', {'id': post.id}) }}">show</a>
+						<a class="btn btn-primary"  href="{{ path('app_admin_post_edit', {'id': post.id}) }}">edit</a>
+						{{ include('admin/post/_delete_form.html.twig') }}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="8">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

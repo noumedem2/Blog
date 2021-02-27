@@ -19,6 +19,13 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function getPaginatedPost(int $limit, int $page,float $totalPage)
+    {
+        $page = ($page == 0) ? 1 : $page;
+        $page = ($page > $totalPage) ? $totalPage : $page;
+        $page = ($page == $totalPage) ? $totalPage +1 : $page;
+        return  $this->findBy([], ['id' => 'asc'], $limit, ($page - 1) * $limit);
+    }
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */

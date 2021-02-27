@@ -1,0 +1,14 @@
+<div class="row">
+	<div class="col-6 m-auto">
+		{{ form_start(form) }}
+		<p>
+			{{form_row(form.name)}}
+		</p>
+		<p>
+			{{form_row(form.slug)}}
+		</p>
+		<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+		{{ form_end(form) }}
+	</div>
+
+</div>

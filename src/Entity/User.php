@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -13,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    use Timestampable;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -22,6 +25,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 
@@ -38,11 +43,15 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @assert\NotBlank
+     * @assert\Length(min = 2 , max = 100)
      */
     private $fisrtName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @assert\NotBlank
+     * @assert\Length(min = 3 , max = 100)
      */
     private $lastName;
 
@@ -183,5 +192,9 @@ class User implements UserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+    public function getFullName()
+    {
+        return $this->fisrtName . ' ' . $this->lastName;
     }
 }

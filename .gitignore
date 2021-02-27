@@ -23,6 +23,6 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 ###> liip/imagine-bundle ###
-/public/media/cache
+/public/media/
 ###< liip/imagine-bundle ###
-/public/images/postscache/
+/public/images/posts/

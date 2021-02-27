@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
@@ -15,6 +17,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Post
 {
+    use Timestampable;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -24,11 +27,15 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @assert\Length(min = 2)
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * @assert\Length(min = 10)
      */
     private $description;
 
@@ -57,14 +64,11 @@ class Post
      * @var int|null
      */
     private $imageSize;
-    /**
-     *
-     * @var \DateTimeInterface|null
-     */
-    private $updatedAt;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * @assert\Length(min = 10)
      */
     private $content;
 

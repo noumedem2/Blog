@@ -1,0 +1,45 @@
+{% extends 'admin/adminBase.html.twig' %}
+
+{% block title %}Category index
+{% endblock %}
+
+{% block body %}
+	<nav class="navbar navbar-light ">
+		<form class="d-flex justify-content-end">
+			<input class="form-control me-2" type="search" placeholder="Search Category" aria-label="Search">
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		</form>
+		<a  class="btn btn-primary" role="button" href="{{ path('app_admin_category_new') }}">Create new category</a>
+	</nav>
+
+	<table class="table my-3  table-hover text-center table-borderless">
+		<thead class="bg-info text-light  rounded ">
+			<tr>
+				<th>Name</th>
+				<th>Slug</th>
+				<th>Created At</th>
+				<th>Updated At</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for category in categories %}
+				<tr>
+					<td>{{ category.name }}</td>
+					<td>{{ category.slug }}</td>
+					<td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td>{{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td class="d-flex justify-content-around">
+						<a  class="btn btn-primary" href="{{ path('app_admin_category_edit', {'id': category.id}) }}">Edit</a>
+						{{ include('admin/category/_delete_form.html.twig') }}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}

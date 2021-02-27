@@ -138,7 +138,8 @@ class ResetPasswordController extends AbstractController
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
-            return $this->redirectToRoute('app_check_email');
+            $this->addFlash('reset_password_error',"Aucun utilisateur n'as cette email");
+            return $this->redirectToRoute('app_forgot_password_request');
         }
 
         try {
@@ -152,8 +153,6 @@ class ResetPasswordController extends AbstractController
             //     'There was a problem handling your password reset request - %s',
             //     $e->getReason()
             // ));
-
-            return $this->redirectToRoute('app_check_email');
         }
 
         $email = (new TemplatedEmail())
@@ -170,7 +169,6 @@ class ResetPasswordController extends AbstractController
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
-
         return $this->redirectToRoute('app_check_email');
     }
 }
