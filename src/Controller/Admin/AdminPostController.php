@@ -72,7 +72,7 @@ class AdminPostController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            
             return $this->redirectToRoute('app_admin_post_index');
         }
 

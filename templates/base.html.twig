@@ -7,7 +7,7 @@
 			{% endblock %}
 		</title>
 		{# Run `composer require symfony/webpack-encore-bundle`
-																																           and uncomment the following Encore helpers to start using Symfony UX #}
+																																																								           and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
@@ -19,21 +19,21 @@
 	<body>
 		<header class="d-flex justify-content-between bg-light">
 			<h1>
-				<a class="nav-link active text-warning" href="{{ path('app_home')}}">Blog</a>
+				<a class="nav-link active text-warning" href="{{ path('app_home')}}">The Magic</a>
 			</h1>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<div class="container-fluid">
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav">
-							<li class="nav-item">
-								<a class="nav-link " aria-current="page" href="#">Categories</a>
-							</li>
 							{% if app.user %}
 								<li class="nav-item">
 									<a class="nav-link " href="#">Account</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link " href="{{ path('app_logout') }}">Logout</a>
+									<a class="nav-link " href="{{ path('app_logout') }}" onclick="event.preventDefault();document.getElementById('js_logout_form').submit();">Logout</a>
+									<form id="js_logout_form" action="{{ path('app_logout') }}" method="POST" style="display: none;">
+										<input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+									</form>
 								</li>
 							{% else %}
 								<li class="nav-item">
@@ -48,7 +48,13 @@
 				</div>
 			</nav>
 		</header>
-		<div class="container"> {% block body %}{% endblock %}
-			</div>
-		</body>
-	</html>
+		<div class="container">
+			{% for type , value in app.flashes() %}
+				{% for message in value %}
+					<div class="alert alert-{{ type }}" role="alert">{{ message }}</div>
+				{% endfor %}
+			{% endfor %}
+			{% block body %}{% endblock %}
+		</div>
+	</body>
+</html>

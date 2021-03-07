@@ -15,6 +15,7 @@
 	<table class="table my-3  table-hover text-center table-borderless">
 		<thead class="bg-info text-light">
 			<tr>
+				<th>Number</th>
 				<th>Title</th>
 				<th>CreatedAt</th>
 				<th>UpdatedAt</th>
@@ -22,14 +23,15 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for post in posts %}
+			{% for key , post in posts %}
 				<tr>
+					<td>{{ key + 1 }}</td>
 					<td>{{ post.title }}</td>
 					<td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td class="d-flex justify-content-evenly">
 						<a class="btn btn-primary" href="{{ path('app_admin_post_show', {'id': post.id}) }}">show</a>
-						<a class="btn btn-primary"  href="{{ path('app_admin_post_edit', {'id': post.id}) }}">edit</a>
+						<a class="btn btn-primary" href="{{ path('app_admin_post_edit', {'id': post.id}) }}">edit</a>
 						{{ include('admin/post/_delete_form.html.twig') }}
 					</td>
 				</tr>

@@ -22,21 +22,13 @@ class HomeController extends AbstractController
     public function index(
         PostRepository $postRepository,
         CategoryRepository $categoryRepository,
-        Request $request,
-        EntityManagerInterface $em,
-        PaginatorInterface $paginator
+        Request $request
     ): Response {
-
-        $dql   = "SELECT p FROM  App\Entity\Post p";
-        $query = $em->createQuery($dql);
-        $pagination = $paginator->paginate(
-            $query, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            9 /*limit per page*/
-        );
-        $totalPage = floor(count($postRepository->findAll()) / $this::PERPAGE);
+        $totalPost = count($postRepository->findAll());
+        $totalPage = ($totalPost == $this::PERPAGE) ? 1 :  floor($totalPost / $this::PERPAGE) + 1;
         $pageCurrent = $request->query->getInt('page');
         $pageCurrent = ($pageCurrent > $totalPage) ? $totalPage : $pageCurrent;
+        $pageCurrent = ($pageCurrent == 0) ? 1 : $pageCurrent;
         $pagination = $postRepository->getPaginatedPost($this::PERPAGE, $pageCurrent, $totalPage);
         $categories = $categoryRepository->findAll();
         $categoryNumber = null;

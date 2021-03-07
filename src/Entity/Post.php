@@ -67,7 +67,6 @@ class Post
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank
      * @assert\Length(min = 10)
      */
     private $content;

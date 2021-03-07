@@ -23,8 +23,9 @@ security:
                     - App\Security\LoginFormAunthenticatorAuthenticator
             logout:
                 path: app_logout
+                csrf_token_generator: security.csrf.token_manager
                 # where to redirect after logout
-                # target: app_any_route
+                target: app_home
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

@@ -25,39 +25,8 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="app_admin_user_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('user_index');
-        }
-
-        return $this->render('admin/user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="app_admin_user_show", methods={"GET"})
-     */
-    public function show(User $user): Response
-    {
-        return $this->render('admin/user/show.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
+    
+   
     /**
      * @Route("/{id}/edit", name="app_admin_user_edit", methods={"GET","POST"})
      */
@@ -69,9 +38,8 @@ class AdminUserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('app_admin_user_index');
         }
-
         return $this->render('admin/user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
@@ -89,6 +57,6 @@ class AdminUserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('app_admin_user_index');
     }
 }

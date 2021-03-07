@@ -7,7 +7,7 @@
 			{% endblock %}
 		</title>
 		{# Run `composer require symfony/webpack-encore-bundle`
-																																																           and uncomment the following Encore helpers to start using Symfony UX #}
+																																																														           and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
@@ -26,6 +26,9 @@
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav ">
 							<li class="nav-item">
+								<a class="nav-link  text-light" href="{{ path('app_home') }}">The Magic</a>
+							</li>
+							<li class="nav-item">
 								<a class="nav-link  text-light" href="#">Account</a>
 							</li>
 							<li class="nav-item">
@@ -36,6 +39,13 @@
 				</div>
 			</nav>
 		</header>
+		<div class="container my-3">
+			{% for type , value in app.flashes() %}
+				{% for message in value %}
+					<div class="alert alert-{{ type }}" role="alert">{{ message }}</div>
+				{% endfor %}
+			{% endfor %}
+		</div>
 		<div class="container-fluid">
 			<div class="row mt-4">
 				<div class="col-2 d-flex justify-content-start">
@@ -51,12 +61,11 @@
 						</li>
 					</ul>
 				</div>
-				<div class="col ">
-					{% block body %}{% endblock %}
+				<div class="col "> {% block body %}{% endblock %}
+					</div>
 				</div>
+
+
 			</div>
-
-
-		</div>
-	</body>
-</html>
+		</body>
+	</html>

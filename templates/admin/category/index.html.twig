@@ -9,12 +9,13 @@
 			<input class="form-control me-2" type="search" placeholder="Search Category" aria-label="Search">
 			<button class="btn btn-outline-success" type="submit">Search</button>
 		</form>
-		<a  class="btn btn-primary" role="button" href="{{ path('app_admin_category_new') }}">Create new category</a>
+		<a class="btn btn-primary" role="button" href="{{ path('app_admin_category_new') }}">Create new category</a>
 	</nav>
 
 	<table class="table my-3  table-hover text-center table-borderless">
 		<thead class="bg-info text-light  rounded ">
 			<tr>
+				<th>Number</th>
 				<th>Name</th>
 				<th>Slug</th>
 				<th>Created At</th>
@@ -23,14 +24,15 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for category in categories %}
+			{% for key, category in categories %}
 				<tr>
+					<td>{{ key +  1}}</td>
 					<td>{{ category.name }}</td>
 					<td>{{ category.slug }}</td>
 					<td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td>{{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td class="d-flex justify-content-around">
-						<a  class="btn btn-primary" href="{{ path('app_admin_category_edit', {'id': category.id}) }}">Edit</a>
+						<a class="btn btn-primary" href="{{ path('app_admin_category_edit', {'id': category.id}) }}">Edit</a>
 						{{ include('admin/category/_delete_form.html.twig') }}
 					</td>
 				</tr>

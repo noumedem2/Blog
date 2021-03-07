@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,10 +16,24 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
         parent::__construct($registry, Category::class);
     }
+
+
+    public function getPostOfCategory(int $id)
+    {
+        $query =  $this->createQueryBuilder('c')
+            ->select('p')
+            ->select('u')
+            ->from('App\Entity\User', 'u')
+            ->from('App\Entity\Post', 'p');
+
+        return $query->getQuery()->getResult();
+    }
+
+
 
     // /**
     //  * @return Category[] Returns an array of Category objects
