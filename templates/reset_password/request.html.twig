@@ -4,9 +4,6 @@
 	<div class="row">
 		<div class="col-md-6 mx-auto">
 			<h1 class="mt-5 mb-3 ">Reset your password</h1>
-			{% for flashError in app.flashes('reset_password_error') %}
-				<div class="alert alert-error bg-danger text-white rounded" role="alert">{{ flashError }}</div>
-			{% endfor %}
 			<p class="mb-3  text-muted">
 				Enter your email address and we we will send you a
 				link to reset your password.

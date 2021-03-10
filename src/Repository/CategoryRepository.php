@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,24 +15,27 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
+    private $em;
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
+        $this->em = $em;
         parent::__construct($registry, Category::class);
     }
 
-
-    public function getPostOfCategory(int $id)
+    public function getPaginatedCategory(int $categoryId, int $limit, int $page, float $totalPage)
     {
-        $query =  $this->createQueryBuilder('c')
-            ->select('p')
-            ->select('u')
-            ->from('App\Entity\User', 'u')
-            ->from('App\Entity\Post', 'p');
+        $page = ($page > $totalPage) ? $totalPage : $page;
+        $page = ($page == 0) ? 1 : $page;
 
-        return $query->getQuery()->getResult();
+        return $this->em->createQuery("SELECT p
+         FROM App\Entity\Post p 
+         JOIN p.Category c 
+         WHERE c.id = ?1 
+         ")->setMaxResults($limit)
+            ->setFirstResult(($page - 1) * $limit)
+            ->setParameter(1, $categoryId)
+            ->getResult();
     }
-
-
 
     // /**
     //  * @return Category[] Returns an array of Category objects

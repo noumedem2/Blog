@@ -5,66 +5,74 @@
 
 {% block body %}
 	{% if categoryNumber != null %}
-		<h1 class="text-center">Article concernant
-			{{ category.name}}</h1>
+		<h1 class="text-center">Article concernant{{ category.name}}</h1>
 	{% else %}
 		<h1 class="text-center">Bienvenue a la page d'acceuil</h1>
 	{% endif %}
 	<div class="container">
-		<div class="row">
+		<div class="row ">
 			<div class="col-10">
-				{% for row in pagination|batch(3) %}
-					<div class="row">
-						{% for post in row %}
-
-							<div class="col-sm">
-								<div class="card my-4" style="width: 18rem;">
-									<img src="{{ ( post.imageName != null) ? vich_uploader_asset(post) | imagine_filter('small_thumb') : asset('/images/default/pexels-eberhard-grossgasteiger-844297.jpg') | imagine_filter('small_thumb') }}" alt="{{ post.title }}"/>
-									<div class="card-body">
-										<h5 class="card-title">{{ post.title}}</h5>
-										<p class="card-text">{{ post.description|raw }}</p>
-										<a href="{{ path('app_show',{id : post.id }) }}" class="btn btn-primary">Lire l'article</a>
+				{% if pagination|length > 0 %}
+					{% for row in pagination|batch(3) %}
+						<div class="row">
+							{% for post in row %}
+								<div class="col-sm">
+									<div class="card my-4" style="width: 18rem;">
+										<img src="{{ ( post.imageName != null) ? vich_uploader_asset(post) | imagine_filter('small_thumb') : asset('/images/default/pexels-eberhard-grossgasteiger-844297.jpg') | imagine_filter('small_thumb') }}" alt="{{ post.title }}"/>
+										<div class="card-body">
+											<h5 class="card-title">{{ post.title}}</h5>
+											<p class="card-text">{{ post.description|raw }}</p>
+											<a href="{{ path('app_show',{id : post.id }) }}" class="btn btn-primary">Lire l'article</a>
+										</div>
 									</div>
 								</div>
-							</div>
-						{% endfor %}
+							{% endfor %}
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="row w-100 h-100 d-flex justify-content-center align-items-center">
+						<div class="col-6">
+							<h2 class="text-info">Aucun n'article Disponible</h2>
+						</div>
 					</div>
-				{% endfor %}
+				{% endif %}
 			</div>
-
 			<div class="col-2">
 				<h2>Categories</h2>
 				<div class="list-group">
 					{% for category in categories %}
 						<a href="{{ path('app_category',{ id: category.id}) }}" class="list-group-item list-group-item-action
-																																																																																																																																																																														 {{
-																																																																																																																																																																																													 (  (category.id == categoryNumber) ) ? 'active' : ''
-																																																																																																																																																																																												}}
-																																																																																																																																																																																												 ">{{ category.name }}</a>
+																																																																																																																																																																																																																																																																																																																																																																																																 {{
+																																																																																																																																																																																																																																																																																																																																																																																																															 (  (category.id == categoryNumber) ) ? 'active' : ''
+																																																																																																																																																																																																																																																																																																																																																																																																														}}
+																																																																																																																																																																																																																																																																																																																																																																																																														 ">{{ category.name }}</a>
 					{% endfor %}
 
 				</div>
 			</div>
-
 		</div>
 	</div>
-	{% if categoryNumber == null %}
-
-
-		{% if totalPage > 1 %}
-			<nav aria-label="Page navigation example">
-				<ul class="pagination  justify-content-center">
-					{% for item in range(1,totalPage) %}
-						<li class="page-item">
-							{% if (pageCurrent > 0) and (item == pageCurrent)   %}
+	{% if totalPage > 1 %}
+		<nav aria-label="Page navigation example">
+			<ul class="pagination  justify-content-center">
+				{% for item in range(1,totalPage) %}
+					<li class="page-item">
+						{% if (pageCurrent > 0) and (item == pageCurrent)   %}
+							{% if categoryNumber != null %}
+								<a class="page-link bg-primary text-white" href="{{ path('app_category',{id:category.id,page:item}) }}">{{ item}}</a>
+							{% else %}
 								<a class="page-link bg-primary text-white" href="{{ path('app_home',{page:item}) }}">{{ item}}</a>
+							{% endif %}
+						{% else %}
+							{% if categoryNumber != null %}
+								<a class="page-link" tabindex="-1" aria-disabled="true" href="{{ path('app_category',{id:category.id,page:item}) }}">{{ item}}</a>
 							{% else %}
 								<a class="page-link" tabindex="-1" aria-disabled="true" href="{{ path('app_home',{page:item}) }}">{{ item}}</a>
 							{% endif %}
-						</li>
-					{% endfor %}
-				</ul>
-			</nav>
-		{% endif %}
+						{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+		</nav>
 	{% endif %}
 {% endblock %}

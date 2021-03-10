@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+<p>{{form_row(form.fisrtName)}}</p>
+<p>{{form_row(form.lastName)}}</p>
+<p>{{form_row(form.email)}}</p>
+<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

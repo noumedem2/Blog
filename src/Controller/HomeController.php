@@ -34,9 +34,18 @@ class HomeController extends AbstractController
         $categoryNumber = null;
         return $this->render(
             'home/index.html.twig',
-            compact('categories', 'categoryNumber', 'pagination', 'totalPage', 'pageCurrent')
+            compact(
+                'categories',
+                'categoryNumber',
+                'pagination',
+                'totalPage',
+                'pageCurrent'
+            )
         );
     }
+
+
+
     /**
      * @Route("/post/{id}", name="app_show")
      */
@@ -44,15 +53,41 @@ class HomeController extends AbstractController
     {
         return $this->render('home/show.html.twig', compact('post'));
     }
+
+
+
+
     /**
      * @Route("/category/{id}", name="app_category")
      */
-    public function category(Category $category, CategoryRepository $categoryRepository): Response
-    {
+    public function category(
+        Category $category,
+        CategoryRepository $categoryRepository,
+        Request $request
+    ): Response {
 
         $categoryNumber = $category->getId();
         $pagination = $category->getPosts();
+
+        $totalPost = count($pagination);
+        $totalPage = ($totalPost == $this::PERPAGE) ? 1 :  floor($totalPost / $this::PERPAGE) + 1;
+        $pageCurrent = $request->query->getInt('page');
+        $pageCurrent = ($pageCurrent > $totalPage) ? $totalPage : $pageCurrent;
+        $pageCurrent = ($pageCurrent == 0) ? 1 : $pageCurrent;
+        $pagination = $categoryRepository->getPaginatedCategory(
+            $categoryNumber,
+            $this::PERPAGE,
+            $pageCurrent,
+            $totalPage
+        );
         $categories = $categoryRepository->findAll();
-        return $this->render('home/index.html.twig', compact('pagination', 'categories', 'categoryNumber', 'category'));
+        return $this->render('home/index.html.twig', compact(
+            'pagination',
+            'categories',
+            'categoryNumber',
+            'category',
+            'totalPage',
+            'pageCurrent'
+        ));
     }
 }
