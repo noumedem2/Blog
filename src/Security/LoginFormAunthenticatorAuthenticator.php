@@ -33,11 +33,13 @@ class LoginFormAunthenticatorAuthenticator extends AbstractFormLoginAuthenticato
     private $passwordEncoder;
     private $flashBagInterface;
 
-    public function __construct(EntityManagerInterface $entityManager,
-     UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, 
-     UserPasswordEncoderInterface $passwordEncoder,
-    FlashBagInterface $flashBagInterface )
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UrlGeneratorInterface $urlGenerator,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        UserPasswordEncoderInterface $passwordEncoder,
+        FlashBagInterface $flashBagInterface
+    ) {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -101,7 +103,7 @@ class LoginFormAunthenticatorAuthenticator extends AbstractFormLoginAuthenticato
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-        $this->flashBagInterface->add('success',"Bienvenue");
+        $this->flashBagInterface->add('success', "Bienvenue");
         return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 

@@ -19,12 +19,15 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function getPaginatedPost(int $limit, int $page,float $totalPage)
+    public function getPaginatedPost(int $limit, int $pageCurrent)
     {
-        $page = ($page > $totalPage) ? $totalPage : $page;
-        $page = ($page == 0) ? 1 : $page;
 
-        return  $this->findBy([], ['updatedAt' => 'desc'], $limit, ($page - 1) * $limit);
+        return  $this->findBy(
+            [],
+            ['updatedAt' => 'desc'],
+            $limit,
+            ($pageCurrent - 1) * $limit
+        );
     }
     // /**
     //  * @return Post[] Returns an array of Post objects
@@ -32,7 +35,7 @@ class PostRepository extends ServiceEntityRepository
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p') 
             ->andWhere('p.exampleField = :val')
             ->setParameter('val', $value)
             ->orderBy('p.id', 'ASC')
