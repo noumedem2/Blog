@@ -31,11 +31,7 @@ class HomeController extends AbstractController
         # page current
         $pageCurrent = $paginator->pageCurrent($request->query->getInt('page'), $totalPage);
         # pagination
-        $pagination = $postRepository->getPaginatedPost(
-            $paginator::PERPAGE,
-            $pageCurrent,
-            $totalPage
-        );
+        $pagination =  $paginator->pagination("App\Entity\Post", $pageCurrent);
 
         return $this->render(
             'home/index.html.twig',
@@ -48,6 +44,8 @@ class HomeController extends AbstractController
             ]
         );
     }
+
+
 
     /**
      * @Route("/post/{id}", name="app_show")
@@ -70,7 +68,6 @@ class HomeController extends AbstractController
         PaginationService $paginator
     ): Response {
 
-        $categoryNumber = $category->getId();
         #total Element
         $totalElement =  $paginator->totalElement($category->getPosts());
         # total page
@@ -78,17 +75,11 @@ class HomeController extends AbstractController
         # page current
         $pageCurrent =  $paginator->pageCurrent($request->query->getInt('page'), $totalPage);
         # pagination
-
-        $pagination = $categoryRepository->getPaginatedCategory(
-            $categoryNumber,
-            $paginator::PERPAGE,
-            $pageCurrent,
-            $totalPage
-        );
+        $pagination = $paginator->pagination("App\Entity\Post", $pageCurrent, "Category", $category->getId());
         return $this->render('home/index.html.twig', [
             'pagination' => $pagination,
             'categories' => $categoryRepository->findAll(),
-            'categoryNumber' => $categoryNumber,
+            'categoryNumber' => $category->getId(),
             'category' => $category,
             'totalPage' => $totalPage,
             'pageCurrent' => $pageCurrent

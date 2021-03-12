@@ -4,6 +4,10 @@
 {% endblock %}
 
 {% block body %}
+
+{{ paginator(totalPage,pageCurrent,categoryNumber) }}
+
+
 	{% if categoryNumber != null %}
 		<h1 class="text-center">Article concernant{{ category.name}}</h1>
 	{% else %}

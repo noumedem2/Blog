@@ -24,9 +24,6 @@ class CategoryRepository extends ServiceEntityRepository
 
     public function getPaginatedCategory(int $categoryId, int $limit, int $page, float $totalPage)
     {
-        $page = ($page > $totalPage) ? $totalPage : $page;
-        $page = ($page == 0) ? 1 : $page;
-
         return $this->em->createQuery("SELECT p
          FROM App\Entity\Post p 
          JOIN p.Category c 
