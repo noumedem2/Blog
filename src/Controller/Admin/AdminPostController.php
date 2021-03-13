@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use App\Service\Pagination\PaginationService;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +20,24 @@ class AdminPostController extends AbstractController
     /**
      * @Route("/", name="app_admin_post_index", methods={"GET"})
      */
-    public function index(PostRepository $postRepository): Response
-    {
+    public function index(
+        PostRepository $postRepository,
+        PaginationService $paginator,
+        Request $request
+    ): Response {
+        # total element
+        $totalPost = $paginator->totalElement($postRepository->findAll());
+        # total de page
+        $totalPage = $paginator->totalPage($totalPost);
+        # page current
+        $pageCurrent = $paginator->pageCurrent($request->query->getInt('page'), $totalPage);
+        # pagination
+        $pagination =  $paginator->pagination("App\Entity\Post", $pageCurrent);
+
         return $this->render('admin/post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $pagination,
+            'totalPage' => $totalPage,
+            'pageCurrent' => $pageCurrent
         ]);
     }
 
@@ -72,7 +87,7 @@ class AdminPostController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            
+
             return $this->redirectToRoute('app_admin_post_index');
         }
 

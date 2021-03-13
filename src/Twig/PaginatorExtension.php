@@ -8,12 +8,6 @@ use Twig\TwigFunction;
 
 class PaginatorExtension extends AbstractExtension
 {
-    private $router;
-    public function __construct(UrlGeneratorInterface $router)
-    {
-        $this->router = $router;
-    }
-
     public function getFunctions(): array
     {
         return [
@@ -23,7 +17,6 @@ class PaginatorExtension extends AbstractExtension
 
     public function paginator($totalPage, $pageCurrent, $categoryNumber)
     {
-        dd($this->router);
         if ($totalPage > 1) {
             $html = "<nav aria-label='Page navigation example'><ul class='pagination justify-content-center'>";
 
@@ -38,23 +31,23 @@ class PaginatorExtension extends AbstractExtension
                 }
             }
 
-        //     return "
-        //                         <a class='page-link bg-primary text-white' href='{{ path('app_category',{id:category.id,page:item}) }}'>{{ item}}</a>
-        //                     {% else %}
-        //                         <a class='page-link bg-primary text-white' href='{{ path('app_home',{page:item}) }}'>{{ item}}</a>
-        //                     {% endif %}
-        //                 {% else %}
-        //                     {% if categoryNumber != null %}
-        //                         <a class='page-link' tabindex='-1' aria-disabled='true' href='{{ path('app_category',{id:category.id,page:item}) }}'>{{ item}}</a>
-        //                     {% else %}
-        //                         <a class='page-link' tabindex='-1' aria-disabled='true' href='{{ path('app_home',{page:item}) }}'>{{ item}}</a>
-        //                     {% endif %}
-        //                 {% endif %}
-        //             </li>
-        //         {% endfor %}
-        //     </ul>
-        // </nav>
-        // ";
-         }
+            //     return "
+            //                         <a class='page-link bg-primary text-white' href='{{ path('app_category',{id:category.id,page:item}) }}'>{{ item}}</a>
+            //                     {% else %}
+            //                         <a class='page-link bg-primary text-white' href='{{ path('app_home',{page:item}) }}'>{{ item}}</a>
+            //                     {% endif %}
+            //                 {% else %}
+            //                     {% if categoryNumber != null %}
+            //                         <a class='page-link' tabindex='-1' aria-disabled='true' href='{{ path('app_category',{id:category.id,page:item}) }}'>{{ item}}</a>
+            //                     {% else %}
+            //                         <a class='page-link' tabindex='-1' aria-disabled='true' href='{{ path('app_home',{page:item}) }}'>{{ item}}</a>
+            //                     {% endif %}
+            //                 {% endif %}
+            //             </li>
+            //         {% endfor %}
+            //     </ul>
+            // </nav>
+            // ";
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use App\Service\Pagination\PaginationService;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +20,23 @@ class AdminCategoryController extends AbstractController
     /**
      * @Route("/", name="app_admin_category_index", methods={"GET"})
      */
-    public function index(CategoryRepository $categoryRepository): Response
-    {
+    public function index(
+        CategoryRepository $categoryRepository,
+        PaginationService $paginator,
+        Request $request
+    ): Response {
+        # total element
+        $totalPost = $paginator->totalElement($categoryRepository->findAll());
+        # total de page
+        $totalPage = $paginator->totalPage($totalPost);
+        # page current
+        $pageCurrent = $paginator->pageCurrent($request->query->getInt('page'), $totalPage);
+        # pagination
+        $pagination =  $paginator->pagination("App\Entity\Category", $pageCurrent);
         return $this->render('admin/category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'categories' => $pagination,
+            'totalPage' => $totalPage,
+            'pageCurrent' => $pageCurrent
         ]);
     }
 

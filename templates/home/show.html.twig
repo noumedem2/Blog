@@ -9,8 +9,11 @@
 			<div class="col-8 m-auto">
 				<h1 class="text-left my-2">{{ post.title}}</h1>
 				<p class="mt-2 ">{{ post.description|raw }}</p>
-				<p>{{post.content|raw }}
-				</p>
+				<p>{{post.content|raw }}</p>
+				<div class="user wg-100 d-flex justify-content-between">
+					<p class="fw-bold">Created by <span class="fst-italic">{{post.user.fullName}}</span></p>
+					<p class="fw-bold"> On <span class="fst-italic"> {{post.user.createdAt|date}}</span></p>
+				</div>
 			</div>
 		</div>
 	</main>

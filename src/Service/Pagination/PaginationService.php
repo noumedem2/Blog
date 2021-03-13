@@ -42,7 +42,7 @@ class PaginationService
         $alias = $this->alias($entity);
         $query = $this->em->createQuery("SELECT DISTINCT $alias FROM $entity  $alias ORDER BY $alias.updatedAt DESC");
         $query->setMaxResults($this::PERPAGE)
-            ->setFirstResult($pageCurrent);
+            ->setFirstResult(($pageCurrent-1)*$this::PERPAGE);
         return $query->getResult();
     }
 
@@ -57,7 +57,7 @@ class PaginationService
          WHERE $aliasColumn.id = ?1 
          ");
         return  $query->setMaxResults($this::PERPAGE)
-            ->setFirstResult(($pageCurrent))
+            ->setFirstResult(($pageCurrent-1)*$this::PERPAGE)
             ->setParameter(1, $id)
             ->getResult();
     }

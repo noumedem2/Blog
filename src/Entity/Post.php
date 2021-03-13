@@ -46,11 +46,6 @@ class Post
     private $Category;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="posts")
-     */
-    private $users;
-
-    /**
      * @Vich\UploadableField(mapping="posts", fileNameProperty="imageName", size="imageSize")
      * @var File|null
      */
@@ -70,6 +65,12 @@ class Post
      * @assert\Length(min = 10)
      */
     private $content;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
 
     public function __construct()
@@ -118,35 +119,6 @@ class Post
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setPosts($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getPosts() === $this) {
-                $user->setPosts(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
@@ -195,6 +167,18 @@ class Post
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
