@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CommentController extends AbstractController
@@ -38,13 +39,12 @@ class CommentController extends AbstractController
      * @Route("/{id}/edit", name="app_comment_edit", methods={"GET"})
      * @return Response
      */
-    public function edit(Request $request, Comment $comment): Response
+    public function edit(Comment $comment,SessionInterface $session): Response
     {
+        $session->set('editComment',$comment->getId());
         $postId = $comment->getPost()->getId();
-
         return $this->redirectToRoute("app_show", [
             'id' => $postId,
-            'editComment' => $comment->getId()
         ]);
     }
 }

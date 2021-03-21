@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -56,9 +57,9 @@ class HomeController extends AbstractController
     /**
      * @Route("/post/{id}", name="app_show",methods={"GET","POST"})
      */
-    public function show(Post $post, Request $request, EntityManagerInterface $em): Response
+    public function show(Post $post, Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
-        $editComment = $request->query->get("editComment");
+        $editComment = $session->get('editComment');
         if ($editComment != null) {
             $comment = $em->getRepository('App\Entity\Comment')->findOneBy(['id' => $editComment]);
         } else {
@@ -73,6 +74,7 @@ class HomeController extends AbstractController
             $comment->setUpdatedAt(new DateTime('now'));
             $em->persist($comment);
             $em->flush($comment);
+            $session->remove('editComment');
             $this->addFlash('success', "Commentaire Ajoute");
             return   $this->redirectToRoute('app_show', ['id' => $post->getId()]);
         }
