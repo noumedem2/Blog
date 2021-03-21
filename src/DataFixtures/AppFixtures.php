@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
 use DateTime;
@@ -22,7 +23,8 @@ class AppFixtures extends Fixture
     {
         $users = $this->userFixtures($manager);
         $categories = $this->categoryFixtures($manager, $users);
-        $this->postFixtures($manager, $categories, $users);
+        $posts =  $this->postFixtures($manager, $categories, $users);
+        $this->commentFixtures($manager, $users, $posts);
     }
     private function userFixtures(ObjectManager $manager)
     {
@@ -88,6 +90,7 @@ class AppFixtures extends Fixture
     }
     public function postFixtures(ObjectManager $manager, array $categories, array $users)
     {
+        $posts = [];
         $faker = Factory::create('fr-Fr');
         for ($i = 0; $i < 100; $i++) {
             $post = new Post();
@@ -98,8 +101,25 @@ class AppFixtures extends Fixture
             $post->setUser($faker->randomElement($users));
             $post->setCreatedAt(new DateTime('now'));
             $post->setUpdatedAt(new DateTime('now'));
+            $posts[] = $post;
             $manager->persist($post);
             $manager->flush();
         }
+        return $posts;
+    }
+    private function commentFixtures(ObjectManager $manager, array $users, array $posts)
+    {
+        $faker = Factory::create('fr-Fr');
+        for ($i = 0; $i < 20; $i++) {
+            $comment = new Comment();
+            $comment->setContent($faker->text(100));
+            $comment->setCreatedAt(new DateTime('now'));
+            $comment->setUpdatedAt(new DateTime('now'));
+            $comment->setUser($faker->randomElement($users));
+            $comment->setPost($faker->randomElement($posts));
+            $manager->persist($comment);
+        }
+        $manager->flush();
+        return $comment;
     }
 }

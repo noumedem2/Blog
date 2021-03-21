@@ -3,14 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
 use App\Service\Pagination\PaginationService;
+use DateTime;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Date;
 
 class HomeController extends AbstractController
 {
@@ -48,11 +54,37 @@ class HomeController extends AbstractController
 
 
     /**
-     * @Route("/post/{id}", name="app_show")
+     * @Route("/post/{id}", name="app_show",methods={"GET","POST"})
      */
-    public function show(Post $post): Response
+    public function show(Post $post, Request $request, EntityManagerInterface $em): Response
     {
-        return $this->render('home/show.html.twig', compact('post'));
+        $editComment = $request->query->get("editComment");
+        if ($editComment != null) {
+            $comment = $em->getRepository('App\Entity\Comment')->findOneBy(['id' => $editComment]);
+        } else {
+            $comment = new Comment();
+        }
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setUser($this->getUser());
+            $comment->setPost($post);
+            $comment->setCreatedAt(new DateTime('now'));
+            $comment->setUpdatedAt(new DateTime('now'));
+            $em->persist($comment);
+            $em->flush($comment);
+            $this->addFlash('success', "Commentaire Ajoute");
+            return   $this->redirectToRoute('app_show', ['id' => $post->getId()]);
+        }
+        return $this->render(
+            'home/show.html.twig',
+            [
+                'post' => $post,
+                'comments' => $post->getComments(),
+                'form' => $form->createView(),
+                'editComment' => $editComment
+            ]
+        );
     }
 
 

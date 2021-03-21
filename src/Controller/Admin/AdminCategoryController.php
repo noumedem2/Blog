@@ -21,18 +21,17 @@ class AdminCategoryController extends AbstractController
      * @Route("/", name="app_admin_category_index", methods={"GET"})
      */
     public function index(
-        CategoryRepository $categoryRepository,
         PaginationService $paginator,
         Request $request
     ): Response {
         # total element
-        $totalPost = $paginator->totalElement($categoryRepository->findAll());
+        $totalPost = $paginator->totalElement($this->getUser()->getCategories());
         # total de page
         $totalPage = $paginator->totalPage($totalPost);
         # page current
         $pageCurrent = $paginator->pageCurrent($request->query->getInt('page'), $totalPage);
         # pagination
-        $pagination =  $paginator->pagination("App\Entity\Category", $pageCurrent);
+        $pagination =  $paginator->pagination("App\Entity\Category", $pageCurrent, 'user', $this->getUser()->getId());
         return $this->render('admin/category/index.html.twig', [
             'categories' => $pagination,
             'totalPage' => $totalPage,

@@ -26,13 +26,13 @@ class AdminPostController extends AbstractController
         Request $request
     ): Response {
         # total element
-        $totalPost = $paginator->totalElement($postRepository->findAll());
+        $totalPost = $paginator->totalElement($this->getUser()->getPosts());
         # total de page
         $totalPage = $paginator->totalPage($totalPost);
         # page current
         $pageCurrent = $paginator->pageCurrent($request->query->getInt('page'), $totalPage);
         # pagination
-        $pagination =  $paginator->pagination("App\Entity\Post", $pageCurrent);
+        $pagination = $paginator->pagination("App\Entity\Post", $pageCurrent, 'user', $this->getUser()->getId());
 
         return $this->render('admin/post/index.html.twig', [
             'posts' => $pagination,

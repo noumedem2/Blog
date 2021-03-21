@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+<p>
+	{{form_row(form.content)}}
+</p>
+<button class="btn btn-primary">{{ button_label|default('Comment') }}</button>
+{{ form_end(form) }}

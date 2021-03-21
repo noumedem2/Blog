@@ -3,7 +3,6 @@
 	{{ post.title }}
 {% endblock %}
 {% block body %}
-
 	<main class="my-4">
 		<div class="row">
 			<div class="col-8 m-auto">
@@ -11,10 +10,43 @@
 				<p class="mt-2 ">{{ post.description|raw }}</p>
 				<p>{{post.content|raw }}</p>
 				<div class="user wg-100 d-flex justify-content-between">
-					<p class="fw-bold">Created by <span class="fst-italic">{{post.user.fullName}}</span></p>
-					<p class="fw-bold"> On <span class="fst-italic"> {{post.user.createdAt|date}}</span></p>
+					<p class="fw-bold">Created by
+						<span class="fst-italic">{{post.user.fullName}}</span>
+					</p>
+					<p class="fw-bold">
+						On
+						<span class="fst-italic">
+							{{post.user.createdAt|date}}</span>
+					</p>
 				</div>
 			</div>
 		</div>
+		{% for comment in comments %}
+			<div class="row mx-3 my-3">
+				<div class="col-8 m-auto">
+					<p class="h4 fw-bold">{{comment.user.fullName}}</p>
+					<p>{{comment.content|raw}}</p>
+					<p>Commente le
+						{{ comment.createdAt|date()}}</p>
+					{% if is_granted('COMMENT_VIEW',comment) and   editComment  == null  %}
+						<div class="d-flex">
+							<a href="{{ path('app_comment_edit',{id: comment.id })}}" class="btn btn-primary me-5">Editer</a>
+							{{ include('home/_delete.html.twig', {'button_label': 'delete'}) }}
+						</div>
+					{% endif %}
+					{% if editComment  == comment.id %}
+						{{ include('home/_form.html.twig', {'button_label': 'Comment'}) }}
+					{% endif %}
+
+				</div>
+			</div>
+		{% endfor %}
+		{% if app.user and   editComment  == null %}
+			<div class="row">
+				<div class="col-8 m-auto">
+					{{ include('home/_form.html.twig', {'button_label': 'Comment'}) }}
+				</div>
+			</div>
+		{% endif %}
 	</main>
 {% endblock %}
