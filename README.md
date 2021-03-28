@@ -1,3 +1,1 @@
-# EasyAdmin
-Administration with EasyAdmin
-###
+
